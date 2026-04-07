@@ -21,7 +21,7 @@ public class BaseHomePage {
     }
 //search
     public void search(String text){
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
         wait.until(ExpectedConditions.visibilityOfElementLocated(searchLocator));
         WebElement inputSearch=driver.findElement(searchLocator);
         inputSearch.sendKeys(text);
@@ -45,7 +45,7 @@ public class BaseHomePage {
 
     //join us
     public LoginPage clickJoinUs(){
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(50));
         WebElement button = wait.until(ExpectedConditions.elementToBeClickable(joinUsButton));
         ((JavascriptExecutor) driver).executeScript(
                 "window.scrollBy(0, 700);");

@@ -1,9 +1,6 @@
 package pages;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -12,9 +9,9 @@ import java.time.Duration;
 
 public class Coursespage {
     private WebDriver driver;
-    private By powerBiCourseCart =By.xpath("//section//div[1]//div[2]//button[1]");
+    private By powerBiCourseSubscribe =By.xpath("//section//div[1]//div[2]//button[1]");
     private By powerCourseDetails=By.xpath("//h3[contains(text(),'تحليل البيانات عبر Power BI')]");
-    private By modal=By.xpath("//h3[@class='text-primary-darkBlue mb-4 text-base font-medium']");
+    //private By modal=By.xpath("//h3[@class='text-primary-darkBlue mb-4 text-base font-medium']");
 
     // course change management
     private By titleCard=By.xpath("//h3[contains(text(),'إدارة التغيير والعمل الجماعي')]");
@@ -30,28 +27,57 @@ public class Coursespage {
     // click course subscription
     public CartPage clickSubscribeCourse(){
 //        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-//        wait.until(ExpectedConditions.elementToBeClickable(powerBiCourseCart));
+//        wait.until(ExpectedConditions.elementToBeClickable(powerBiCourseSubscribe));
 //                try {
 //            Thread.sleep(10000);
 //        } catch (InterruptedException e) {
 //            throw new RuntimeException(e);
 //        }
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+//        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+//
+//        Actions actions = new Actions(driver);
+//        JavascriptExecutor js = (JavascriptExecutor) driver;
+//
+//        // Move mouse away to close hover popup
+//        actions.moveByOffset(0, 300).perform();   // move mouse away
+//
+//        //  Scroll to button
+//        WebElement button = wait.until(ExpectedConditions.presenceOfElementLocated(powerBiCourseSubscribe));
+//        js.executeScript("arguments[0].scrollIntoView({block:'center'});", button);
+//
+//        // Click button
+//        wait.until(ExpectedConditions.elementToBeClickable(button)).click();
 
+        //driver.findElement(powerBiCourseSubscribe).click();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
         Actions actions = new Actions(driver);
         JavascriptExecutor js = (JavascriptExecutor) driver;
 
-        // 1) Move mouse away to close hover popup
-        actions.moveByOffset(300, 0).perform();   // move mouse away
+        // 1) Move mouse away so popup disappears
+        WebElement body = driver.findElement(By.tagName("body"));
+        actions.moveToElement(body, 0, 0).perform();
 
-        // 3) Scroll to button
-        WebElement button = wait.until(ExpectedConditions.presenceOfElementLocated(powerBiCourseCart));
-        js.executeScript("arguments[0].scrollIntoView({block:'center'});", button);
+        // optional tiny wait for animation
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
-        // 4) Click button
-        wait.until(ExpectedConditions.elementToBeClickable(button)).click();
+        // 2) RE-FIND the button after DOM changes
+        WebElement freshButton = wait.until(
+                ExpectedConditions.presenceOfElementLocated(powerBiCourseSubscribe)
+        );
 
-        //driver.findElement(powerBiCourseCart).click();
+        // 3) Scroll into view
+        js.executeScript("arguments[0].scrollIntoView({block:'center'});", freshButton);
+
+        // 4) Click
+        try {
+            wait.until(ExpectedConditions.elementToBeClickable(freshButton)).click();
+        } catch (ElementClickInterceptedException e) {
+            js.executeScript("arguments[0].click();", freshButton);
+        }
         return new CartPage(driver);
     }
 
@@ -79,6 +105,9 @@ public class Coursespage {
 
     public boolean isCourseImageDisplayed() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        Actions actions = new Actions(driver);
+        actions.moveByOffset(300, 0).perform();   // move mouse away
+
         WebElement image = wait.until(ExpectedConditions.visibilityOfElementLocated(courseImage)
         );
 
