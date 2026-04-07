@@ -5,6 +5,7 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 public class RegisterTests extends BaseTest {
     SoftAssert softAssert = new SoftAssert();
@@ -27,11 +28,17 @@ public class RegisterTests extends BaseTest {
     //assert required name message
     softAssert.assertEquals(registerPage.validateMessageName(),"الاسم مطلوب","message is incorrect");
 
-    //assert url
-    softAssert.assertTrue(registerPage.getUrl().contains("register"));
 
     softAssert.assertAll();
 
+
+
+    }
+    //test case 3
+    @Test
+    public void testRegisterPage(){
+        var registerPage= baseHomePage.clickJoinUs().clickCreateAccount();
+        assertTrue(registerPage.getUrl().contains("register"));
 
 
     }

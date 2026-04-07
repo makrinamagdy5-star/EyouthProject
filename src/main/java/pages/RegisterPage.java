@@ -180,6 +180,8 @@ public class RegisterPage {
 
     //validate url
     public String getUrl(){
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.urlContains("register"));
         return driver.getCurrentUrl();
     }
 }
