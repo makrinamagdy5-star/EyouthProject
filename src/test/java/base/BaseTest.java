@@ -3,6 +3,7 @@ package base;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import pages.BaseHomePage;
@@ -26,8 +27,8 @@ public class BaseTest {
 
 
     }
-//   @AfterClass
-//    public void tearDown(){
-//       driver.close();  //close tab if there is many tabs
-//    }
+   @AfterClass
+    public void tearDown(){
+       driver.close();  //close tab if there is many tabs
+    }
 }
